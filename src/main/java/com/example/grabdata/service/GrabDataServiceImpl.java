@@ -57,7 +57,10 @@ public class GrabDataServiceImpl implements GrabDataService {
         }
         for (CourseListQueryResult result : results) {
             String coursePrice = result.getCoursePrice();
-            String str = coursePrice.substring(coursePrice.lastIndexOf("¥"));
+            String str = coursePrice;
+            if(coursePrice.lastIndexOf("¥")>=0){
+                str = coursePrice.substring(coursePrice.lastIndexOf("¥"));
+            }
             result.setCoursePrice(str);
         }
         return results;
@@ -79,7 +82,11 @@ public class GrabDataServiceImpl implements GrabDataService {
                 queryResultVO.setClassDuration(mapping.getClassDuration());
                 queryResultVO.setClassName(mapping.getClassName());
                 String classPrice = mapping.getClassPrice();
-                queryResultVO.setClassPrice(classPrice.substring(classPrice.lastIndexOf("¥")));
+                String price = classPrice;
+                if(classPrice.lastIndexOf("¥")>=0){
+                    price = classPrice.substring(classPrice.lastIndexOf("¥"));
+                }
+                queryResultVO.setClassPrice(price);
                 queryResultVO.setCoursePackId(mapping.getCoursePackId());
                 queryResultVO.setRemainNums(mapping.getRemainNums());
                 //班级信息
