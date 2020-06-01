@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0 //EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.grabdata.mapper.IGrabData">
+
+    <insert id="insertDashboard" parameterType="list">
+        insert into course_dashboard(course_id,course_name,course_total,create_time,update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.courseId},
+              #{item.courseName},
+              #{item.courseTotal},
+              #{item.createTime},
+              #{item.updateTime}
+            )
+        </foreach>
+
+    </insert>
+
+    <!--按条件查询课程总览信息-->
+    <select id="queryDashboard" parameterType="CourseQueryParam" resultType="GrabDashboard">
+        select * from course_dashboard
+        <where>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time >= #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--按条件查询课程信息 日期 TODO-->
+    <select id="queryCourseList" parameterType="CourseQueryParam" resultType="CourseList">
+        select * from course_list t
+        <where>
+            <if test="courseParentId != null and courseParentId != ''">
+                and t.course_parent_id = #{courseParentId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and t.create_time >= #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--按条件查询课程老师信息-->
+    <select id="queryCourseTeacherMapping" parameterType="CourseQueryParam" resultType="CourseTeacherMapping">
+        select * from course_teacher_mapping t
+        <where>
+            <if test="coursePackId != null and coursePackId != ''">
+                and t.course_pack_id = #{coursePackId}
+            </if>
+            <if test="courseChildId != null and courseChildId != ''">
+                and t.course_id = #{courseChildId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and t.create_time >= #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--按条件查询具体老师信息-->
+    <select id="queryCourseTeacherInfo" parameterType="CourseQueryParam" resultType="CourseTeacherInfo">
+        select * from course_teacher_info t
+        <where>
+            <if test="courseId != null and courseId != ''">
+                and t.course_id = #{courseId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and t.create_time >= #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCourseList" parameterType="list">
+        insert into course_list(course_parent_id,course_child_id
+          ,course_type,course_pack_id,course_name,course_duration
+          ,course_enlist,course_price,create_time,update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.courseParentId},
+            #{item.courseChildId},
+            #{item.courseType},
+            #{item.coursePackId},
+            #{item.courseName},
+            #{item.courseDuration},
+            #{item.courseEnlist},
+            #{item.coursePrice},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+
+    </insert>
+
+    <insert id="insertCourseTeacherMapping" parameterType="list">
+        insert into course_teacher_mapping(course_pack_id,course_id
+        ,class_name,class_duration,teacher_name,job_type
+        ,remain_nums,class_price,create_time,update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.coursePackId},
+            #{item.courseId},
+            #{item.className},
+            #{item.classDuration},
+            #{item.teacherName},
+            #{item.jobType},
+            #{item.remainNums},
+            #{item.classPrice},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+
+    </insert>
+
+    <insert id="insertCourseTeacherInfo" parameterType="list">
+        insert into course_teacher_info(course_id,teacher_name,rate,note,create_time,update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.courseId},
+            #{item.teacherName},
+            #{item.rate},
+            #{item.note},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+
+    </insert>
+
+</mapper>
